@@ -5,430 +5,236 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Off-World Archive | Abandoned but not Forgotten</title>
 <style>
-/* --- Color Variables & Base Setup --- */
-:root {
-    color-scheme: dark;
-    --bg: #060a13;
-    --card: #0f1623;
-    --line: #243044;
-    --text: #c9d4e5;
-    --mute: #8393ab;
-    --acc: #58a6ff;
-    --acc2: #a78bfa;
-    --ok: #3fb950;
-    --warn: #e3b341;
-    --white: #fff;
-    box-sizing: border-box;
-    padding-top: env(safe-area-inset-top, 0px);
-    padding-bottom: env(safe-area-inset-bottom, 0px);
-}
-
-* { box-sizing: border-box; }
-html { scroll-behavior: smooth; }
-
-body {
-    margin: 0;
-    background: radial-gradient(ellipse at top, #101a2e, var(--bg) 60%);
-    color: var(--text);
-    font: 16px/1.65 'Segoe UI', system-ui, -apple-system, Roboto, sans-serif;
-}
-
-#stars {
-    position: fixed; inset: 0; width: 100%; height: 100%; z-index: 0;
-}
-
-header, main, footer {
-    position: relative; z-index: 1; max-width: 1180px; margin: 0 auto; padding: 0 20px;
-}
-
-/* --- Header & Typography --- */
-header { text-align: center; padding-top: 70px; padding-bottom: 30px; }
-
-.eyebrow {
-    letter-spacing: .3em; text-transform: uppercase; color: var(--mute); font-size: .8em;
-}
-
-h1 {
-    font-size: clamp(2.4em, 8vw, 4.6em); line-height: 1.1; margin: 12px 0;
-    background: linear-gradient(90deg, var(--acc), var(--acc2), var(--acc));
-    background-size: 200%;
-    -webkit-background-clip: text;
-    background-clip: text;
-    color: transparent;
-    animation: flow 8s linear infinite;
-}
-
-@keyframes flow { to { background-position: 200%; } }
-
-.sub { color: var(--mute); font-size: 1.15em; max-width: 640px; margin: 0 auto 26px; }
-
-/* --- Top Statistics --- */
-.stats { display: flex; justify-content: center; gap: 14px; flex-wrap: wrap; margin-bottom: 28px; }
-.stat {
-    background: rgba(15, 22, 35, .8); border: 1px solid var(--line);
-    border-radius: 12px; padding: 12px 22px; min-width: 120px;
-}
-.stat b { display: block; font-size: 1.9em; color: var(--white); }
-.stat span { color: var(--mute); font-size: .85em; }
-
-.cta {
-    display: inline-block; background: linear-gradient(90deg, var(--acc), var(--acc2));
-    color: #04101f; font-weight: 700; padding: 12px 28px; border-radius: 30px;
-    text-decoration: none; transition: transform .2s;
-}
-.cta:hover { transform: translateY(-3px) scale(1.03); }
-
-/* --- Filters --- */
-.filters { display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; margin: 40px 0 28px; }
-.chip {
-    background: var(--card); color: var(--text); border: 1px solid var(--line);
-    border-radius: 24px; padding: 9px 20px; font: inherit; cursor: pointer; transition: .2s;
-}
-.chip:hover, .chip[aria-pressed=true] {
-    border-color: var(--acc); color: var(--white); background: #14243d;
-}
-
-/* --- Grid & Exhibit Cards --- */
-.grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 340px), 1fr)); gap: 22px; }
-
-.card {
-    background: rgba(15, 22, 35, .92); border: 1px solid var(--line); border-radius: 16px;
-    padding: 22px; transition: transform .3s, border-color .3s, box-shadow .3s;
-}
-.card[hidden] { display: none; }
-.card:hover { transform: translateY(-6px); border-color: var(--acc); box-shadow: 0 12px 30px rgba(88, 166, 255, .15); }
-
-.top { display: flex; gap: 14px; align-items: center; flex-wrap: wrap; }
-.icon { font-size: 2.4em; animation: float 4s ease-in-out infinite; }
-@keyframes float { 50% { transform: translateY(-6px); } }
-
-.top h2 { margin: 0; color: var(--white); font-size: 1.3em; }
-.years { color: var(--mute); font-size: .9em; }
-
-/* --- Badges --- */
-.badge {
-    margin-left: auto; font-size: .8em; border: 1px solid; border-radius: 20px;
-    padding: 3px 12px; display: inline-flex; align-items: center; gap: 7px; white-space: nowrap;
-}
-.badge::before { content: ""; width: 8px; height: 8px; border-radius: 50%; background: currentColor; }
-.badge.silent { color: var(--warn); }
-.badge.active { color: var(--ok); }
-.badge.active::before { animation: pulse 1.6s infinite; }
-@keyframes pulse { 0% { box-shadow: 0 0 0 0 rgba(63, 185, 80, .7); } 100% { box-shadow: 0 0 0 10px rgba(63, 185, 80, 0); } }
-
-/* --- Story & Data Details --- */
-.meta {
-    font-family: ui-monospace, Consolas, monospace; font-size: .88em; background: #080d18;
-    color: #79c0ff; border-radius: 8px; padding: 10px 12px; margin: 16px 0;
-}
-.tl { list-style: none; margin: 0 0 18px; padding: 0 0 0 18px; border-left: 2px solid var(--line); }
-.tl li { position: relative; margin-bottom: 14px; }
-.tl li::before {
-    content: ""; position: absolute; left: -25px; top: 6px; width: 10px; height: 10px;
-    border-radius: 50%; background: var(--acc);
-}
-.tl h3 { margin: 0; font-size: .78em; letter-spacing: .14em; text-transform: uppercase; color: var(--acc); }
-.tl p { margin: 2px 0 0; }
-
-.sci, .fact { border-radius: 8px; padding: 12px 14px; margin-top: 10px; color: var(--white); font-size: .95em; }
-.sci { background: #14233a; border-left: 4px solid var(--acc); }
-.fact { background: #1d1a35; border-left: 4px solid var(--acc2); }
-
-/* --- Quiz UI --- */
-#quiz {
-    margin: 70px auto 0; max-width: 680px; background: rgba(15, 22, 35, .92);
-    border: 1px solid var(--line); border-radius: 16px; padding: 26px;
-}
-#quiz h2 { margin-top: 0; color: var(--white); text-align: center; }
-.qq { font-weight: 600; color: var(--white); }
-
-.opt {
-    display: block; width: 100%; text-align: left; margin: 8px 0; padding: 11px 16px;
-    background: #0a111d; color: var(--text); border: 1px solid var(--line);
-    border-radius: 10px; font: inherit; cursor: pointer; transition: .2s;
-}
-.opt:hover:not(:disabled) { border-color: var(--acc); }
-.opt.good { border-color: var(--ok); background: #0f2a18; color: var(--white); }
-.opt.bad { border-color: #f85149; background: #2a1215; }
-.score { font-size: 1.3em; text-align: center; color: var(--white); }
-
-footer {
-    text-align: center; margin-top: 60px; padding: 24px 20px 40px;
-    border-top: 1px solid var(--line); color: var(--mute); font-size: .9em;
-}
-
-/* --- Reveal Animations --- */
-.reveal { opacity: 0; transform: translateY(26px); transition: opacity .7s, transform .7s; }
-.reveal.in { opacity: 1; transform: none; }
-@media (prefers-reduced-motion: reduce) {
-    * { animation: none !important; scroll-behavior: auto !important; }
-    .reveal { opacity: 1; transform: none; transition: none; }
-}
+:root{color-scheme:dark;--bg:#060a13;--card:#0f1623;--line:#243044;--text:#c9d4e5;--mute:#8393ab;--acc:#58a6ff;--acc2:#a78bfa;--ok:#3fb950;--warn:#e3b341;--white:#fff;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:radial-gradient(ellipse at top,#101a2e,var(--bg) 60%);color:var(--text);font:16px/1.65 'Segoe UI',system-ui,-apple-system,Roboto,sans-serif}
+#stars{position:fixed;inset:0;width:100%;height:100%;z-index:0}
+header,main,footer{position:relative;z-index:1;max-width:1180px;margin:0 auto;padding:0 20px}
+header{text-align:center;padding-top:70px;padding-bottom:30px}
+.eyebrow{letter-spacing:.3em;text-transform:uppercase;color:var(--mute);font-size:.8em}
+h1{font-size:clamp(2.4em,8vw,4.6em);line-height:1.1;margin:12px 0;background:linear-gradient(90deg,var(--acc),var(--acc2),var(--acc));background-size:200%;-webkit-background-clip:text;background-clip:text;color:transparent;animation:flow 8s linear infinite}
+@keyframes flow{to{background-position:200%}}
+.sub{color:var(--mute);font-size:1.15em;max-width:640px;margin:0 auto 26px}
+.stats{display:flex;justify-content:center;gap:14px;flex-wrap:wrap;margin-bottom:28px}
+.stat{background:rgba(15,22,35,.8);border:1px solid var(--line);border-radius:12px;padding:12px 22px;min-width:120px}
+.stat b{display:block;font-size:1.9em;color:var(--white)}
+.stat span{color:var(--mute);font-size:.85em}
+.cta{display:inline-block;background:linear-gradient(90deg,var(--acc),var(--acc2));color:#04101f;font-weight:700;padding:12px 28px;border-radius:30px;text-decoration:none;transition:transform .2s}
+.cta:hover{transform:translateY(-3px) scale(1.03)}
+.filters{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin:40px 0 28px}
+.chip{background:var(--card);color:var(--text);border:1px solid var(--line);border-radius:24px;padding:9px 20px;font:inherit;cursor:pointer;transition:.2s}
+.chip:hover,.chip[aria-pressed=true]{border-color:var(--acc);color:var(--white);background:#14243d}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,340px),1fr));gap:22px}
+.card{background:rgba(15,22,35,.92);border:1px solid var(--line);border-radius:16px;padding:22px;transition:transform .3s,border-color .3s,box-shadow .3s}
+.card[hidden]{display:none}
+.card:hover{transform:translateY(-6px);border-color:var(--acc);box-shadow:0 12px 30px rgba(88,166,255,.15)}
+.top{display:flex;gap:14px;align-items:center;flex-wrap:wrap}
+.icon{font-size:2.4em;animation:float 4s ease-in-out infinite}
+@keyframes float{50%{transform:translateY(-6px)}}
+.top h2{margin:0;color:var(--white);font-size:1.3em}
+.years{color:var(--mute);font-size:.9em}
+.badge{margin-left:auto;font-size:.8em;border:1px solid;border-radius:20px;padding:3px 12px;display:inline-flex;align-items:center;gap:7px;white-space:nowrap}
+.badge::before{content:"";width:8px;height:8px;border-radius:50%;background:currentColor}
+.badge.silent{color:var(--warn)}
+.badge.active{color:var(--ok)}
+.badge.active::before{animation:pulse 1.6s infinite}
+@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(63,185,80,.7)}100%{box-shadow:0 0 0 10px rgba(63,185,80,0)}}
+.meta{font-family:ui-monospace,Consolas,monospace;font-size:.88em;background:#080d18;color:#79c0ff;border-radius:8px;padding:10px 12px;margin:16px 0}
+.tl{list-style:none;margin:0 0 18px;padding:0 0 0 18px;border-left:2px solid var(--line)}
+.tl li{position:relative;margin-bottom:14px}
+.tl li::before{content:"";position:absolute;left:-25px;top:6px;width:10px;height:10px;border-radius:50%;background:var(--acc)}
+.tl h3{margin:0;font-size:.78em;letter-spacing:.14em;text-transform:uppercase;color:var(--acc)}
+.tl p{margin:2px 0 0}
+.sci,.fact{border-radius:8px;padding:12px 14px;margin-top:10px;color:var(--white);font-size:.95em}
+.sci{background:#14233a;border-left:4px solid var(--acc)}
+.fact{background:#1d1a35;border-left:4px solid var(--acc2)}
+#quiz{margin:70px auto 0;max-width:680px;background:rgba(15,22,35,.92);border:1px solid var(--line);border-radius:16px;padding:26px}
+#quiz h2{margin-top:0;color:var(--white);text-align:center}
+.qq{font-weight:600;color:var(--white)}
+.opt{display:block;width:100%;text-align:left;margin:8px 0;padding:11px 16px;background:#0a111d;color:var(--text);border:1px solid var(--line);border-radius:10px;font:inherit;cursor:pointer;transition:.2s}
+.opt:hover:not(:disabled){border-color:var(--acc)}
+.opt.good{border-color:var(--ok);background:#0f2a18;color:var(--white)}
+.opt.bad{border-color:#f85149;background:#2a1215}
+.score{font-size:1.3em;text-align:center;color:var(--white)}
+footer{text-align:center;margin-top:60px;padding:24px 20px 40px;border-top:1px solid var(--line);color:var(--mute);font-size:.9em}
+.reveal{opacity:0;transform:translateY(26px);transition:opacity .7s,transform .7s}
+.reveal.in{opacity:1;transform:none}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;scroll-behavior:auto!important}.reveal{opacity:1;transform:none;transition:none}}
 </style>
 </head>
 <body>
 <canvas id="stars" aria-hidden="true"></canvas>
-
 <header>
   <div class="eyebrow">NASA Space Apps Challenge 2026</div>
   <h1>Off-World Archive</h1>
   <p class="sub"><strong>Abandoned but not Forgotten.</strong> The stories of NASA’s hardware left on the Moon, on Mars and in deep space, and the science it made possible.</p>
-  
   <div class="stats">
-    <div class="stat"><b class="num" data-n="{{ artifacts|length }}">0</b><span>Machines</span></div>
+    <div class="stat"><b class="num" data-n="8">0</b><span>Machines</span></div>
     <div class="stat"><b class="num" data-n="3">0</b><span>Frontiers</span></div>
     <div class="stat"><b class="num" data-n="1969">0</b><span>Since</span></div>
   </div>
-  
   <a class="cta" href="#archive">Explore the archive</a>
 </header>
-
 <main>
-  <!-- Category Filters -->
   <div class="filters" id="archive" role="group" aria-label="Filter exhibits">
     <button class="chip" data-f="all" aria-pressed="true">All</button>
     <button class="chip" data-f="moon" aria-pressed="false">🌕 Moon</button>
     <button class="chip" data-f="mars" aria-pressed="false">🔴 Mars</button>
     <button class="chip" data-f="deep" aria-pressed="false">🌌 Deep space</button>
   </div>
-
   <div class="grid">
-    <!-- Loop through database objects -->
-    {% for item in artifacts %}
-    <article class="card reveal" data-cat="{{ item['category'] }}">
+    
+    <article class="card reveal" data-cat="moon">
       <div class="top">
-        <span class="icon">{{ item['icon'] }}</span>
-        <div><h2>{{ item['name'] }}</h2><div class="years">{{ item['years'] }}</div></div>
-        <span class="badge {{ item['status'] }}">{{ item['status_label'] }}</span>
+        <span class="icon">🌕</span>
+        <div><h2>Apollo 11 Descent Stage</h2><div class="years">Landed 1969</div></div>
+        <span class="badge silent">Silent since 1969</span>
       </div>
-      
-      <div class="meta"><b>Location:</b> {{ item['location'] }}<br><b>Coordinates:</b> {{ item['coordinates'] }}</div>
-      
+      <div class="meta"><b>Location:</b> The Moon (Sea of Tranquility)<br><b>Coordinates:</b> 0.674° N, 23.473° E</div>
       <ol class="tl">
-        <li><h3>Launch</h3><p>{{ item['launch'] }}</p></li>
-        <li><h3>Discovery</h3><p>{{ item['discovery'] }}</p></li>
-        <li><h3>Final chapter</h3><p>{{ item['final'] }}</p></li>
+        <li><h3>Launch</h3><p>On 20 July 1969, the Lunar Module “Eagle” touched down with Neil Armstrong and Buzz Aldrin aboard.</p></li>
+        <li><h3>Discovery</h3><p>After their moonwalk, the astronauts blasted off in the top half of Eagle, using the descent stage as a launch pad. They carried home about 21 kg of Moon rock.</p></li>
+        <li><h3>Final chapter</h3><p>The descent stage never moved again. It still sits in the Sea of Tranquility, and orbiting cameras have photographed it from above.</p></li>
       </ol>
-      
-      <div class="sci"><b>🔬 What it taught us:</b> {{ item['science'] }}</div>
-      <div class="fact"><b>🚀 Space fact:</b> {{ item['fun_fact'] }}</div>
+      <div class="sci"><b>🔬 What it taught us:</b> The crew also left a mirror-like laser reflector nearby. Scientists still bounce lasers off it to measure the Earth–Moon distance.</div>
+      <div class="fact"><b>🚀 Space fact:</b> A plaque on its leg reads “We came in peace for all mankind.”</div>
     </article>
-    {% endfor %}
+    
+    <article class="card reveal" data-cat="moon">
+      <div class="top">
+        <span class="icon">🚙</span>
+        <div><h2>Apollo 15 Lunar Rover</h2><div class="years">Landed 1971</div></div>
+        <span class="badge silent">Parked since 1971</span>
+      </div>
+      <div class="meta"><b>Location:</b> The Moon (Hadley–Apennine)<br><b>Coordinates:</b> 26.13° N, 3.63° E (landing site)</div>
+      <ol class="tl">
+        <li><h3>Launch</h3><p>Folded up inside Apollo 15’s lander, the first Lunar Roving Vehicle was unpacked in July 1971.</p></li>
+        <li><h3>Discovery</h3><p>Astronauts David Scott and James Irwin drove it about 28 km, reaching places they could never have walked to, and gathered around 77 kg of Moon rocks.</p></li>
+        <li><h3>Final chapter</h3><p>Scott parked it where its TV camera could watch the liftoff. It is still parked there today.</p></li>
+      </ol>
+      <div class="sci"><b>🔬 What it taught us:</b> The rocks it helped collect revealed how the Moon’s crust formed, including the famous “Genesis Rock”.</div>
+      <div class="fact"><b>🚀 Space fact:</b> On this mission, Scott dropped a hammer and a feather together on the Moon, and they landed at the same time.</div>
+    </article>
+    
+    <article class="card reveal" data-cat="mars">
+      <div class="top">
+        <span class="icon">🤖</span>
+        <div><h2>Opportunity Rover</h2><div class="years">2004–2018</div></div>
+        <span class="badge silent">Silent since 2018</span>
+      </div>
+      <div class="meta"><b>Location:</b> Mars (Meridiani Planum)<br><b>Coordinates:</b> 1.95° S, 354.47° E (landing site)</div>
+      <ol class="tl">
+        <li><h3>Launch</h3><p>Opportunity landed on 25 January 2004 and was built for a 90-day mission.</p></li>
+        <li><h3>Discovery</h3><p>It kept going for about 14 years and drove 45 km. It found tiny iron-rich spheres nicknamed “blueberries” and rocks that formed in water.</p></li>
+        <li><h3>Final chapter</h3><p>A huge dust storm blocked its sunlight in 2018. Engineers sent more than a thousand recovery commands, but it never replied. NASA ended the mission in February 2019.</p></li>
+      </ol>
+      <div class="sci"><b>🔬 What it taught us:</b> Opportunity showed that ancient Mars had watery places that could have supported life.</div>
+      <div class="fact"><b>🚀 Space fact:</b> Its final data were poetically translated as “My battery is low and it’s getting dark.”</div>
+    </article>
+    
+    <article class="card reveal" data-cat="mars">
+      <div class="top">
+        <span class="icon">📡</span>
+        <div><h2>Viking 1 Lander</h2><div class="years">1976–1982</div></div>
+        <span class="badge silent">Silent since 1982</span>
+      </div>
+      <div class="meta"><b>Location:</b> Mars (Chryse Planitia)<br><b>Coordinates:</b> 22.48° N, 47.97° W</div>
+      <ol class="tl">
+        <li><h3>Launch</h3><p>On 20 July 1976, Viking 1 became the first NASA spacecraft to land and work on Mars.</p></li>
+        <li><h3>Discovery</h3><p>It sent back the first close-up pictures from the Martian surface and ran experiments to look for signs of life in the soil.</p></li>
+        <li><h3>Final chapter</h3><p>It worked for more than six years. In 1982 a mistaken update left its antenna pointing away from Earth, and it was never heard from again.</p></li>
+      </ol>
+      <div class="sci"><b>🔬 What it taught us:</b> Its weather station recorded Mars’s seasons, and its soil tests gave results that scientists still debate.</div>
+      <div class="fact"><b>🚀 Space fact:</b> It landed exactly seven years after Apollo 11’s Moon landing.</div>
+    </article>
+    
+    <article class="card reveal" data-cat="mars">
+      <div class="top">
+        <span class="icon">🚁</span>
+        <div><h2>Ingenuity Helicopter</h2><div class="years">2021–2024</div></div>
+        <span class="badge silent">Retired in 2024</span>
+      </div>
+      <div class="meta"><b>Location:</b> Mars (Jezero Crater)<br><b>Coordinates:</b> ≈ 18.4° N, 77.5° E</div>
+      <ol class="tl">
+        <li><h3>Launch</h3><p>This tiny helicopter rode to Mars on the Perseverance rover and landed on 18 February 2021.</p></li>
+        <li><h3>Discovery</h3><p>On 19 April 2021 it made the first powered flight on another planet. It was meant to fly 5 times and flew 72.</p></li>
+        <li><h3>Final chapter</h3><p>In January 2024 a rough landing damaged its rotor blades. NASA ended its mission, and it stays on Mars.</p></li>
+      </ol>
+      <div class="sci"><b>🔬 What it taught us:</b> It proved that flying on Mars is possible, even though the air is about 100 times thinner than on Earth.</div>
+      <div class="fact"><b>🚀 Space fact:</b> It carried a tiny piece of fabric from the Wright brothers’ 1903 airplane.</div>
+    </article>
+    
+    <article class="card reveal" data-cat="deep">
+      <div class="top">
+        <span class="icon">🛰️</span>
+        <div><h2>Voyager 1</h2><div class="years">1977–today</div></div>
+        <span class="badge active">Still sending data</span>
+      </div>
+      <div class="meta"><b>Location:</b> Interstellar space<br><b>Coordinates:</b> Over 25 billion km from Earth</div>
+      <ol class="tl">
+        <li><h3>Launch</h3><p>Launched on 5 September 1977 to visit Jupiter and Saturn.</p></li>
+        <li><h3>Discovery</h3><p>It found erupting volcanoes on Jupiter’s moon Io and, in 1990, took the “Pale Blue Dot” photo of Earth from billions of kilometres away.</p></li>
+        <li><h3>Final chapter</h3><p>In 2012 it became the first human-made object to enter interstellar space. It is still sending data home.</p></li>
+      </ol>
+      <div class="sci"><b>🔬 What it taught us:</b> It showed scientists what the edge of the Sun’s bubble of particles is like, and it still measures the space between the stars.</div>
+      <div class="fact"><b>🚀 Space fact:</b> It carries a Golden Record with sounds and pictures from Earth. A radio signal now takes about a day to reach it.</div>
+    </article>
+    
+    <article class="card reveal" data-cat="deep">
+      <div class="top">
+        <span class="icon">🛰️</span>
+        <div><h2>Voyager 2</h2><div class="years">1977–today</div></div>
+        <span class="badge active">Still sending data</span>
+      </div>
+      <div class="meta"><b>Location:</b> Interstellar space<br><b>Coordinates:</b> Over 20 billion km from Earth</div>
+      <ol class="tl">
+        <li><h3>Launch</h3><p>Launched on 20 August 1977, 16 days before Voyager 1, on a grand tour of the giant planets.</p></li>
+        <li><h3>Discovery</h3><p>It is the only spacecraft ever to visit Uranus (1986) and Neptune (1989), where it found new moons and rings.</p></li>
+        <li><h3>Final chapter</h3><p>It entered interstellar space in 2018 and is still sending data.</p></li>
+      </ol>
+      <div class="sci"><b>🔬 What it taught us:</b> Its flybys revealed Uranus’s tilted magnetic field, Neptune’s fast winds and icy geysers on Triton.</div>
+      <div class="fact"><b>🚀 Space fact:</b> Its twin launched later but moved faster, so Voyager 1 is farther away.</div>
+    </article>
+    
+    <article class="card reveal" data-cat="deep">
+      <div class="top">
+        <span class="icon">🌠</span>
+        <div><h2>Pioneer 10</h2><div class="years">1972–2003</div></div>
+        <span class="badge silent">Silent since 2003</span>
+      </div>
+      <div class="meta"><b>Location:</b> Deep space<br><b>Coordinates:</b> Heading toward the star Aldebaran</div>
+      <ol class="tl">
+        <li><h3>Launch</h3><p>Launched on 2 March 1972 to find out whether a spacecraft could cross the asteroid belt.</p></li>
+        <li><h3>Discovery</h3><p>It survived the belt and became the first spacecraft to fly past Jupiter in December 1973, measuring the planet’s dangerous radiation.</p></li>
+        <li><h3>Final chapter</h3><p>Its last signal reached Earth on 23 January 2003. It is still drifting through space, but too far away to hear.</p></li>
+      </ol>
+      <div class="sci"><b>🔬 What it taught us:</b> It paved the way for later missions by showing that the asteroid belt and Jupiter’s radiation could be survived.</div>
+      <div class="fact"><b>🚀 Space fact:</b> It carries a gold plaque showing a man, a woman and Earth’s location, and will pass near Aldebaran in about 2 million years.</div>
+    </article>
+    
   </div>
-
-  <!-- Interactive Quiz Container -->
-  <section id="quiz" class="reveal">
-    <h2>🧠 Test yourself</h2>
-    <div id="q"></div>
-  </section>
+  <section id="quiz" class="reveal"><h2>🧠 Test yourself</h2><div id="q"></div></section>
 </main>
-
-<footer>
-    <p>Built by Team Solo Orbit | NASA Space Apps Challenge 2026</p>
-    <p>Facts based on NASA mission information.</p>
-</footer>
-
+<footer><p>Built by Team Solo Orbit | NASA Space Apps Challenge 2026</p><p>Facts based on NASA mission information.</p></footer>
 <script>
-    // ==========================================
-    // 1. STARFIELD ANIMATION
-    // ==========================================
-    const canvas = document.getElementById('stars');
-    const ctx = canvas.getContext('2d');
-    const prefersReducedMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
-    let canvasWidth, canvasHeight, starsArray = [];
-
-    // Setup the stars based on screen size
-    function initStars() {
-        canvasWidth = canvas.width = innerWidth;
-        canvasHeight = canvas.height = innerHeight;
-        const numberOfStars = Math.min(170, (canvasWidth * canvasHeight) / 9000 | 0);
-        
-        starsArray = [];
-        for (let i = 0; i < numberOfStars; i++) {
-            starsArray.push({
-                x: Math.random() * canvasWidth,
-                y: Math.random() * canvasHeight,
-                radius: Math.random() * 1.4 + 0.2,
-                phase: Math.random() * 6.28,       // Starting point for pulsing
-                velocity: Math.random() * 0.02 + 0.005 // Speed of pulsing
-            });
-        }
-    }
-
-    // Draw and animate the stars
-    function animateStars(time) {
-        ctx.clearRect(0, 0, canvasWidth, canvasHeight);
-        
-        for (const star of starsArray) {
-            // Calculate a pulsing opacity based on time
-            const opacity = 0.4 + 0.6 * Math.abs(Math.sin(star.phase + time * star.velocity * 0.1));
-            ctx.fillStyle = `rgba(200, 220, 255, ${opacity})`;
-            
-            ctx.beginPath();
-            ctx.arc(star.x, star.y, star.radius, 0, Math.PI * 2);
-            ctx.fill();
-        }
-        
-        // Loop animation if user hasn't requested reduced motion in their OS
-        if (!prefersReducedMotion) {
-            requestAnimationFrame(animateStars);
-        }
-    }
-
-    initStars();
-    window.addEventListener('resize', () => {
-        initStars();
-        if (prefersReducedMotion) animateStars(0); 
-    });
-    requestAnimationFrame(animateStars);
-
-
-    // ==========================================
-    // 2. CATEGORY FILTERING LOGIC
-    // ==========================================
-    const filterButtons = document.querySelectorAll('.chip');
-    const artifactCards = document.querySelectorAll('.card');
-
-    filterButtons.forEach(button => {
-        button.onclick = () => {
-            // Highlight the clicked button
-            filterButtons.forEach(btn => btn.setAttribute('aria-pressed', btn === button));
-            
-            // Show/hide cards based on their data-cat attribute
-            const selectedCategory = button.dataset.f;
-            artifactCards.forEach(card => {
-                card.hidden = !(selectedCategory === 'all' || card.dataset.cat === selectedCategory);
-            });
-        };
-    });
-
-
-    // ==========================================
-    // 3. SCROLL REVEAL ANIMATIONS (Intersection Observer)
-    // ==========================================
-    const observer = new IntersectionObserver(entries => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                entry.target.classList.add('in'); // Triggers the CSS transition
-                observer.unobserve(entry.target); // Only animate once
-            }
-        });
-    }, { threshold: 0.1 });
-
-    document.querySelectorAll('.reveal').forEach(element => observer.observe(element));
-
-
-    // ==========================================
-    // 4. ANIMATED NUMBER COUNTERS
-    // ==========================================
-    document.querySelectorAll('.num').forEach(element => {
-        const targetNumber = parseFloat(element.dataset.n);
-        const startTime = performance.now();
-
-        function countUp(currentTime) {
-            // Calculate progress between 0 and 1 over 1.4 seconds (1400ms)
-            let progress = Math.min((currentTime - startTime) / 1400, 1);
-            // Apply an easing curve so it slows down at the end
-            let easedProgress = 1 - Math.pow(1 - progress, 3);
-            
-            element.textContent = Math.round(targetNumber * easedProgress);
-            
-            if (progress < 1) {
-                requestAnimationFrame(countUp);
-            }
-        }
-        requestAnimationFrame(countUp);
-    });
-
-
-    // ==========================================
-    // 5. INTERACTIVE QUIZ LOGIC
-    // ==========================================
-    const quizQuestions = [
-        {
-            question: "Which rover was built for 90 days but worked for about 14 years?",
-            options: ["Viking 1", "Opportunity", "Ingenuity"],
-            correctAnswerIndex: 1,
-            feedback: "Yes! Opportunity ran from 2004 to 2018."
-        },
-        {
-            question: "Which machine made the first powered flight on another planet?",
-            options: ["Ingenuity", "Voyager 2", "Apollo 15 Rover"],
-            correctAnswerIndex: 0,
-            feedback: "Correct! Ingenuity flew 72 times on Mars."
-        },
-        {
-            question: "Which spacecraft is the only one to have visited both Uranus and Neptune?",
-            options: ["Pioneer 10", "Voyager 1", "Voyager 2"],
-            correctAnswerIndex: 2,
-            feedback: "Right! Voyager 2 flew by them in 1986 and 1989."
-        }
-    ];
-
-    let currentQuestionIndex = 0;
-    let totalScore = 0;
-    const quizContainer = document.getElementById('q');
-
-    function renderQuiz() {
-        // Check if quiz is finished
-        if (currentQuestionIndex >= quizQuestions.length) {
-            const perfectScore = (totalScore === quizQuestions.length);
-            quizContainer.innerHTML = `
-                <p class="score">You scored ${totalScore} / ${quizQuestions.length} 
-                ${perfectScore ? '🎉 Mission complete!' : '. Explore the archive and try again!'}</p>
-                <p style="text-align:center"><button class="chip" id="replayBtn">Play again</button></p>
-            `;
-            document.getElementById('replayBtn').onclick = () => {
-                currentQuestionIndex = 0; 
-                totalScore = 0; 
-                renderQuiz();
-            };
-            return;
-        }
-
-        // Render current question and buttons
-        const questionData = quizQuestions[currentQuestionIndex];
-        let buttonsHTML = questionData.options.map((optionText, index) => 
-            `<button class="opt" data-index="${index}">${optionText}</button>`
-        ).join('');
-
-        quizContainer.innerHTML = `
-            <p class="qq">${currentQuestionIndex + 1}. ${questionData.question}</p>
-            ${buttonsHTML}
-            <p id="quizFeedback" aria-live="polite"></p>
-        `;
-
-        // Handle clicking an answer
-        const optionButtons = quizContainer.querySelectorAll('.opt');
-        optionButtons.forEach(button => {
-            button.onclick = () => {
-                const chosenIndex = parseInt(button.dataset.index);
-                
-                // Disable all buttons after guess
-                optionButtons.forEach(btn => btn.disabled = true);
-                
-                // Highlight the correct answer
-                optionButtons[questionData.correctAnswerIndex].classList.add('good');
-                
-                if (chosenIndex === questionData.correctAnswerIndex) {
-                    totalScore++;
-                    document.getElementById('quizFeedback').innerHTML = questionData.feedback + ' <button class="chip" id="nextBtn">Next</button>';
-                } else {
-                    button.classList.add('bad');
-                    document.getElementById('quizFeedback').innerHTML = `Not quite. The answer is ${questionData.options[questionData.correctAnswerIndex]}. <button class="chip" id="nextBtn">Next</button>`;
-                }
-
-                // Move to next question
-                document.getElementById('nextBtn').onclick = () => {
-                    currentQuestionIndex++;
-                    renderQuiz();
-                };
-            };
-        });
-    }
-
-    // Start the quiz
-    renderQuiz();
+(()=>{const c=document.getElementById('stars'),x=c.getContext('2d'),rm=matchMedia('(prefers-reduced-motion: reduce)').matches;let w,h,s=[];
+function size(){w=c.width=innerWidth;h=c.height=innerHeight;s=Array.from({length:Math.min(170,w*h/9000|0)},()=>({x:Math.random()*w,y:Math.random()*h,r:Math.random()*1.4+.2,p:Math.random()*6.28,v:Math.random()*.02+.005}))}
+function draw(t){x.clearRect(0,0,w,h);for(const a of s){x.fillStyle='rgba(200,220,255,'+(.4+.6*Math.abs(Math.sin(a.p+t*a.v*.1)))+')';x.beginPath();x.arc(a.x,a.y,a.r,0,6.283);x.fill()}if(!rm)requestAnimationFrame(draw)}
+size();addEventListener('resize',()=>{size();if(rm)draw(0)});requestAnimationFrame(draw)})();
+const chips=document.querySelectorAll('.chip'),cards=document.querySelectorAll('.card');
+chips.forEach(b=>b.onclick=()=>{chips.forEach(c=>c.setAttribute('aria-pressed',c===b));cards.forEach(k=>{k.hidden=!(b.dataset.f==='all'||k.dataset.cat===b.dataset.f)})});
+const io=new IntersectionObserver(e=>e.forEach(i=>{if(i.isIntersecting){i.target.classList.add('in');io.unobserve(i.target)}}),{threshold:.1});
+document.querySelectorAll('.reveal').forEach(n=>io.observe(n));
+document.querySelectorAll('.num').forEach(n=>{const t=+n.dataset.n,st=performance.now();(function f(now){const p=Math.min((now-st)/1400,1);n.textContent=Math.round(t*(1-Math.pow(1-p,3)));if(p<1)requestAnimationFrame(f)})(st)});
+const Q=[{q:"Which rover was built for 90 days but worked for about 14 years?",o:["Viking 1","Opportunity","Ingenuity"],a:1,e:"Yes! Opportunity ran from 2004 to 2018."},
+{q:"Which machine made the first powered flight on another planet?",o:["Ingenuity","Voyager 2","Apollo 15 Rover"],a:0,e:"Correct! Ingenuity flew 72 times on Mars."},
+{q:"Which spacecraft is the only one to have visited both Uranus and Neptune?",o:["Pioneer 10","Voyager 1","Voyager 2"],a:2,e:"Right! Voyager 2 flew by them in 1986 and 1989."}];
+let i=0,sc=0;const box=document.getElementById('q');
+function show(){if(i>=Q.length){box.innerHTML=`<p class="score">You scored ${sc} / ${Q.length} ${sc===Q.length?'🎉 Mission complete!':'. Explore the archive and try again!'}</p><p style="text-align:center"><button class="chip" id="re">Play again</button></p>`;document.getElementById('re').onclick=()=>{i=sc=0;show()};return}
+const k=Q[i];box.innerHTML=`<p class="qq">${i+1}. ${k.q}</p>`+k.o.map((t,j)=>`<button class="opt" data-j="${j}">${t}</button>`).join('')+'<p id="fb" aria-live="polite"></p>';
+const os=box.querySelectorAll('.opt');os.forEach(b=>b.onclick=()=>{const j=+b.dataset.j;os.forEach(o=>o.disabled=true);os[k.a].classList.add('good');if(j===k.a)sc++;else b.classList.add('bad');document.getElementById('fb').innerHTML=(j===k.a?k.e:'Not quite. The answer is '+k.o[k.a]+'.')+' <button class="chip" id="nx">Next</button>';document.getElementById('nx').onclick=()=>{i++;show()}})}
+show();
 </script>
 </body>
 </html>
