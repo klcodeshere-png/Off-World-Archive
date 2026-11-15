@@ -1,4 +1,4 @@
-# Off-World-Archive-
+# Off-World-Archive
 Project done in NASA Space App Hackathon 
 # Description 
 I developed the 'Off-World Archive,' an interactive digital museum that catalogs NASA's discarded hardware resting on the Moon, Mars, and drifting in Deep Space. To address the challenge, it transforms dense mission logs into an engaging, gamified experience specifically tailored for school-age space enthusiasts. Each interactive exhibit card breaks down the artifact's journey into a three beat story Launch, Discovery, and Final Chapternwhile highlighting live status badges, off-world coordinates, and the specific science lessons each machine taught us. This project is important because it bridges the gap between raw scientific data and human storytelling. By making space history accessible and fun through interactive quizzes and dynamic sorting, it preserves the legacy of these engineering marvels and ensures these silent pioneers continue to inspire the next generation.
