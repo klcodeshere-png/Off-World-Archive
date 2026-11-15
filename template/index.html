@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Off-World Archive | Abandoned but not Forgotten</title>
+<style>
+/* --- Color Variables & Base Setup --- */
+:root {
+    color-scheme: dark;
+    --bg: #060a13;
+    --card: #0f1623;
+    --line: #243044;
+    --text: #c9d4e5;
+    --mute: #8393ab;
+    --acc: #58a6ff;
+    --acc2: #a78bfa;
+    --ok: #3fb950;
+    --warn: #e3b341;
+    --white: #fff;
+    box-sizing: border-box;
+    padding-top: env(safe-area-inset-top, 0px);
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+}
+
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+
+body {
+    margin: 0;
+    background: radial-gradient(ellipse at top, #101a2e, var(--bg) 60%);
+    color: var(--text);
+    font: 16px/1.65 'Segoe UI', system-ui, -apple-system, Roboto, sans-serif;
+}
+
+#stars {
+    position: fixed; inset: 0; width: 100%; height: 100%; z-index: 0;
+}
+
+header, main, footer {
+    position: relative; z-index: 1; max-width: 1180px; margin: 0 auto; padding: 0 20px;
+}
+
+/* --- Header & Typography --- */
+header { text-align: center; padding-top: 70px; padding-bottom: 30px; }
+
+.eyebrow {
+    letter-spacing: .3em; text-transform: uppercase; color: var(--mute); font-size: .8em;
+}
+
+h1 {
+    font-size: clamp(2.4em, 8vw, 4.6em); line-height: 1.1; margin: 12px 0;
+    background: linear-gradient(90deg, var(--acc), var(--acc2), var(--acc));
+    background-size: 200%;
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    animation: flow 8s linear infinite;
+}
+
+@keyframes flow { to { background-position: 200%; } }
+
+.sub { color: var(--mute); font-size: 1.15em; max-width: 640px; margin: 0 auto 26px; }
+
+/* --- Top Statistics --- */
+.stats { display: flex; justify-content: center; gap: 14px; flex-wrap: wrap; margin-bottom: 28px; }
+.stat {
+    background: rgba(15, 22, 35, .8); border: 1px solid var(--line);
+    border-radius: 12px; padding: 12px 22px; min-width: 120px;
+}
+.stat b { display: block; font-size: 1.9em; color: var(--white); }
+.stat span { color: var(--mute); font-size: .85em; }
+
+.cta {
+    display: inline-block; background: linear-gradient(90deg, var(--acc), var(--acc2));
+    color: #04101f; font-weight: 700; padding: 12px 28px; border-radius: 30px;
+    text-decoration: none; transition: transform .2s;
+}
+.cta:hover { transform: translateY(-3px) scale(1.03); }
+
+/* --- Filters --- */
+.filters { display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; margin: 40px 0 28px; }
+.chip {
+    background: var(--card); color: var(--text); border: 1px solid var(--line);
+    border-radius: 24px; padding: 9px 20px; font: inherit; cursor: pointer; transition: .2s;
+}
+.chip:hover, .chip[aria-pressed=true] {
+    border-color: var(--acc); color: var(--white); background: #14243d;
+}
+
+/* --- Grid & Exhibit Cards --- */
+.grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 340px), 1fr)); gap: 22px; }
+
+.card {
+    background: rgba(15, 22, 35, .92); border: 1px solid var(--line); border-radius: 16px;
+    padding: 22px; transition: transform .3s, border-color .3s, box-shadow .3s;
+}
+.card[hidden] { display: none; }
+.card:hover { transform: translateY(-6px); border-color: var(--acc); box-shadow: 0 12px 30px rgba(88, 166, 255, .15); }
+
+.top { display: flex; gap: 14px; align-items: center; flex-wrap: wrap; }
+.icon { font-size: 2.4em; animation: float 4s ease-in-out infinite; }
+@keyframes float { 50% { transform: translateY(-6px); } }
+
+.top h2 { margin: 0; color: var(--white); font-size: 1.3em; }
+.years { color: var(--mute); font-size: .9em; }
+
+/* --- Badges --- */
+.badge {
+    margin-left: auto; font-size: .8em; border: 1px solid; border-radius: 20px;
+    padding: 3px 12px; display: inline-flex; align-items: center; gap: 7px; white-space: nowrap;
+}
+.badge::before { content: ""; width: 8px; height: 8px; border-radius: 50%; background: currentColor; }
+.badge.silent { color: var(--warn); }
+.badge.active { color: var(--ok); }
+.badge.active::before { animation: pulse 1.6s infinite; }
+@keyframes pulse { 0% { box-shadow: 0 0 0 0 rgba(63, 185, 80, .7); } 100% { box-shadow: 0 0 0 10px rgba(63, 185, 80, 0); } }
+
+/* --- Story & Data Details --- */
+.meta {
+    font-family: ui-monospace, Consolas, monospace; font-size: .88em; background: #080d18;
+    color: #79c0ff; border-radius: 8px; padding: 10px 12px; margin: 16px 0;
+}
+.tl { list-style: none; margin: 0 0 18px; padding: 0 0 0 18px; border-left: 2px solid var(--line); }
+.tl li { position: relative; margin-bottom: 14px; }
+.tl li::before {
+    content: ""; position: absolute; left: -25px; top: 6px; width: 10px; height: 10px;
+    border-radius: 50%; background: var(--acc);
+}
+.tl h3 { margin: 0; font-size: .78em; letter-spacing: .14em; text-transform: uppercase; color: var(--acc); }
+.tl p { margin: 2px 0 0; }
+
+.sci, .fact { border-radius: 8px; padding: 12px 14px; margin-top: 10px; color: var(--white); font-size: .95em; }
+.sci { background: #14233a; border-left: 4px solid var(--acc); }
+.fact { background: #1d1a35; border-left: 4px solid var(--acc2); }
+
+/* --- Quiz UI --- */
+#quiz {
+    margin: 70px auto 0; max-width: 680px; background: rgba(15, 22, 35, .92);
+    border: 1px solid var(--line); border-radius: 16px; padding: 26px;
+}
+#quiz h2 { margin-top: 0; color: var(--white); text-align: center; }
+.qq { font-weight: 600; color: var(--white); }
+
+.opt {
+    display: block; width: 100%; text-align: left; margin: 8px 0; padding: 11px 16px;
+    background: #0a111d; color: var(--text); border: 1px solid var(--line);
+    border-radius: 10px; font: inherit; cursor: pointer; transition: .2s;
+}
+.opt:hover:not(:disabled) { border-color: var(--acc); }
+.opt.good { border-color: var(--ok); background: #0f2a18; color: var(--white); }
+.opt.bad { border-color: #f85149; background: #2a1215; }
+.score { font-size: 1.3em; text-align: center; color: var(--white); }
+
+footer {
+    text-align: center; margin-top: 60px; padding: 24px 20px 40px;
+    border-top: 1px solid var(--line); color: var(--mute); font-size: .9em;
+}
+
+/* --- Reveal Animations --- */
+.reveal { opacity: 0; transform: translateY(26px); transition: opacity .7s, transform .7s; }
+.reveal.in { opacity: 1; transform: none; }
+@media (prefers-reduced-motion: reduce) {
+    * { animation: none !important; scroll-behavior: auto !important; }
+    .reveal { opacity: 1; transform: none; transition: none; }
+}
+</style>
+</head>
+<body>
+<canvas id="stars" aria-hidden="true"></canvas>
+
+<header>
+  <div class="eyebrow">NASA Space Apps Challenge 2026</div>
+  <h1>Off-World Archive</h1>
+  <p class="sub"><strong>Abandoned but not Forgotten.</strong> The stories of NASA’s hardware left on the Moon, on Mars and in deep space, and the science it made possible.</p>
+  
+  <div class="stats">
+    <div class="stat"><b class="num" data-n="{{ artifacts|length }}">0</b><span>Machines</span></div>
+    <div class="stat"><b class="num" data-n="3">0</b><span>Frontiers</span></div>
+    <div class="stat"><b class="num" data-n="1969">0</b><span>Since</span></div>
+  </div>
+  
+  <a class="cta" href="#archive">Explore the archive</a>
+</header>
+
+<main>
+  <!-- Category Filters -->
+  <div class="filters" id="archive" role="group" aria-label="Filter exhibits">
+    <button class="chip" data-f="all" aria-pressed="true">All</button>
+    <button class="chip" data-f="moon" aria-pressed="false">🌕 Moon</button>
+    <button class="chip" data-f="mars" aria-pressed="false">🔴 Mars</button>
+    <button class="chip" data-f="deep" aria-pressed="false">🌌 Deep space</button>
+  </div>
+
+  <div class="grid">
+    <!-- Loop through database objects -->
+    {% for item in artifacts %}
+    <article class="card reveal" data-cat="{{ item['category'] }}">
+      <div class="top">
+        <span class="icon">{{ item['icon'] }}</span>
+        <div><h2>{{ item['name'] }}</h2><div class="years">{{ item['years'] }}</div></div>
+        <span class="badge {{ item['status'] }}">{{ item['status_label'] }}</span>
+      </div>
+      
+      <div class="meta"><b>Location:</b> {{ item['location'] }}<br><b>Coordinates:</b> {{ item['coordinates'] }}</div>
+      
+      <ol class="tl">
+        <li><h3>Launch</h3><p>{{ item['launch'] }}</p></li>
+        <li><h3>Discovery</h3><p>{{ item['discovery'] }}</p></li>
+        <li><h3>Final chapter</h3><p>{{ item['final'] }}</p></li>
+      </ol>
+      
+      <div class="sci"><b>🔬 What it taught us:</b> {{ item['science'] }}</div>
+      <div class="fact"><b>🚀 Space fact:</b> {{ item['fun_fact'] }}</div>
+    </article>
+    {% endfor %}
+  </div>
+
+  <!-- Interactive Quiz Container -->
+  <section id="quiz" class="reveal">
+    <h2>🧠 Test yourself</h2>
+    <div id="q"></div>
+  </section>
+</main>
+
+<footer>
+    <p>Built by Team Solo Orbit | NASA Space Apps Challenge 2026</p>
+    <p>Facts based on NASA mission information.</p>
+</footer>
+
+<script>
+    // ==========================================
+    // 1. STARFIELD ANIMATION
+    // ==========================================
+    const canvas = document.getElementById('stars');
+    const ctx = canvas.getContext('2d');
+    const prefersReducedMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
+    let canvasWidth, canvasHeight, starsArray = [];
+
+    // Setup the stars based on screen size
+    function initStars() {
+        canvasWidth = canvas.width = innerWidth;
+        canvasHeight = canvas.height = innerHeight;
+        const numberOfStars = Math.min(170, (canvasWidth * canvasHeight) / 9000 | 0);
+        
+        starsArray = [];
+        for (let i = 0; i < numberOfStars; i++) {
+            starsArray.push({
+                x: Math.random() * canvasWidth,
+                y: Math.random() * canvasHeight,
+                radius: Math.random() * 1.4 + 0.2,
+                phase: Math.random() * 6.28,       // Starting point for pulsing
+                velocity: Math.random() * 0.02 + 0.005 // Speed of pulsing
+            });
+        }
+    }
+
+    // Draw and animate the stars
+    function animateStars(time) {
+        ctx.clearRect(0, 0, canvasWidth, canvasHeight);
+        
+        for (const star of starsArray) {
+            // Calculate a pulsing opacity based on time
+            const opacity = 0.4 + 0.6 * Math.abs(Math.sin(star.phase + time * star.velocity * 0.1));
+            ctx.fillStyle = `rgba(200, 220, 255, ${opacity})`;
+            
+            ctx.beginPath();
+            ctx.arc(star.x, star.y, star.radius, 0, Math.PI * 2);
+            ctx.fill();
+        }
+        
+        // Loop animation if user hasn't requested reduced motion in their OS
+        if (!prefersReducedMotion) {
+            requestAnimationFrame(animateStars);
+        }
+    }
+
+    initStars();
+    window.addEventListener('resize', () => {
+        initStars();
+        if (prefersReducedMotion) animateStars(0); 
+    });
+    requestAnimationFrame(animateStars);
+
+
+    // ==========================================
+    // 2. CATEGORY FILTERING LOGIC
+    // ==========================================
+    const filterButtons = document.querySelectorAll('.chip');
+    const artifactCards = document.querySelectorAll('.card');
+
+    filterButtons.forEach(button => {
+        button.onclick = () => {
+            // Highlight the clicked button
+            filterButtons.forEach(btn => btn.setAttribute('aria-pressed', btn === button));
+            
+            // Show/hide cards based on their data-cat attribute
+            const selectedCategory = button.dataset.f;
+            artifactCards.forEach(card => {
+                card.hidden = !(selectedCategory === 'all' || card.dataset.cat === selectedCategory);
+            });
+        };
+    });
+
+
+    // ==========================================
+    // 3. SCROLL REVEAL ANIMATIONS (Intersection Observer)
+    // ==========================================
+    const observer = new IntersectionObserver(entries => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('in'); // Triggers the CSS transition
+                observer.unobserve(entry.target); // Only animate once
+            }
+        });
+    }, { threshold: 0.1 });
+
+    document.querySelectorAll('.reveal').forEach(element => observer.observe(element));
+
+
+    // ==========================================
+    // 4. ANIMATED NUMBER COUNTERS
+    // ==========================================
+    document.querySelectorAll('.num').forEach(element => {
+        const targetNumber = parseFloat(element.dataset.n);
+        const startTime = performance.now();
+
+        function countUp(currentTime) {
+            // Calculate progress between 0 and 1 over 1.4 seconds (1400ms)
+            let progress = Math.min((currentTime - startTime) / 1400, 1);
+            // Apply an easing curve so it slows down at the end
+            let easedProgress = 1 - Math.pow(1 - progress, 3);
+            
+            element.textContent = Math.round(targetNumber * easedProgress);
+            
+            if (progress < 1) {
+                requestAnimationFrame(countUp);
+            }
+        }
+        requestAnimationFrame(countUp);
+    });
+
+
+    // ==========================================
+    // 5. INTERACTIVE QUIZ LOGIC
+    // ==========================================
+    const quizQuestions = [
+        {
+            question: "Which rover was built for 90 days but worked for about 14 years?",
+            options: ["Viking 1", "Opportunity", "Ingenuity"],
+            correctAnswerIndex: 1,
+            feedback: "Yes! Opportunity ran from 2004 to 2018."
+        },
+        {
+            question: "Which machine made the first powered flight on another planet?",
+            options: ["Ingenuity", "Voyager 2", "Apollo 15 Rover"],
+            correctAnswerIndex: 0,
+            feedback: "Correct! Ingenuity flew 72 times on Mars."
+        },
+        {
+            question: "Which spacecraft is the only one to have visited both Uranus and Neptune?",
+            options: ["Pioneer 10", "Voyager 1", "Voyager 2"],
+            correctAnswerIndex: 2,
+            feedback: "Right! Voyager 2 flew by them in 1986 and 1989."
+        }
+    ];
+
+    let currentQuestionIndex = 0;
+    let totalScore = 0;
+    const quizContainer = document.getElementById('q');
+
+    function renderQuiz() {
+        // Check if quiz is finished
+        if (currentQuestionIndex >= quizQuestions.length) {
+            const perfectScore = (totalScore === quizQuestions.length);
+            quizContainer.innerHTML = `
+                <p class="score">You scored ${totalScore} / ${quizQuestions.length} 
+                ${perfectScore ? '🎉 Mission complete!' : '. Explore the archive and try again!'}</p>
+                <p style="text-align:center"><button class="chip" id="replayBtn">Play again</button></p>
+            `;
+            document.getElementById('replayBtn').onclick = () => {
+                currentQuestionIndex = 0; 
+                totalScore = 0; 
+                renderQuiz();
+            };
+            return;
+        }
+
+        // Render current question and buttons
+        const questionData = quizQuestions[currentQuestionIndex];
+        let buttonsHTML = questionData.options.map((optionText, index) => 
+            `<button class="opt" data-index="${index}">${optionText}</button>`
+        ).join('');
+
+        quizContainer.innerHTML = `
+            <p class="qq">${currentQuestionIndex + 1}. ${questionData.question}</p>
+            ${buttonsHTML}
+            <p id="quizFeedback" aria-live="polite"></p>
+        `;
+
+        // Handle clicking an answer
+        const optionButtons = quizContainer.querySelectorAll('.opt');
+        optionButtons.forEach(button => {
+            button.onclick = () => {
+                const chosenIndex = parseInt(button.dataset.index);
+                
+                // Disable all buttons after guess
+                optionButtons.forEach(btn => btn.disabled = true);
+                
+                // Highlight the correct answer
+                optionButtons[questionData.correctAnswerIndex].classList.add('good');
+                
+                if (chosenIndex === questionData.correctAnswerIndex) {
+                    totalScore++;
+                    document.getElementById('quizFeedback').innerHTML = questionData.feedback + ' <button class="chip" id="nextBtn">Next</button>';
+                } else {
+                    button.classList.add('bad');
+                    document.getElementById('quizFeedback').innerHTML = `Not quite. The answer is ${questionData.options[questionData.correctAnswerIndex]}. <button class="chip" id="nextBtn">Next</button>`;
+                }
+
+                // Move to next question
+                document.getElementById('nextBtn').onclick = () => {
+                    currentQuestionIndex++;
+                    renderQuiz();
+                };
+            };
+        });
+    }
+
+    // Start the quiz
+    renderQuiz();
+</script>
+</body>
+</html>
